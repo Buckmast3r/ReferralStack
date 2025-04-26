@@ -4,6 +4,7 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
     plugins: [react()],
     root: '.', // Ensure the root is set to the project directory
+    base: './', // Set the base path for resolving assets
     build: {
         rollupOptions: {
             input: './index.html', // Explicitly specify the entry point
