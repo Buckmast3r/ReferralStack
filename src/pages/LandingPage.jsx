@@ -1,87 +1,112 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import React from "react";
+import { motion } from "framer-motion";
+import Navbar from "../components/Navbar";
+import Button from "../components/Button";
+import { Link } from "react-router-dom";
 
 export default function LandingPage() {
-  const { user } = useAuth();
-
   return (
-    <div className="min-h-screen flex flex-col justify-between">
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-gray-50 flex flex-col">
+      <Navbar />
+
       {/* Hero Section */}
-      <section className="flex flex-col items-center justify-center text-center py-20 px-4">
-        <h1 className="text-4xl sm:text-5xl font-bold mb-4 text-gray-900">Welcome to ReferralStack</h1>
-        <p className="text-xl text-gray-600 mb-8">Stack. Share. Grow. Your referrals, organized professionally.</p>
-        {!user ? (
-          <Link to="/login">
-            <button className="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-md text-lg font-medium transition-colors duration-200">
-              Login to Get Started
-            </button>
-          </Link>
-        ) : (
-          <Link to="/home">
-            <button className="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-md text-lg font-medium transition-colors duration-200">
-              Go to Dashboard
-            </button>
-          </Link>
-        )}
-      </section>
+      <motion.section 
+        initial={{ opacity: 0, y: 20 }} 
+        animate={{ opacity: 1, y: 0 }} 
+        transition={{ duration: 0.8 }} 
+        className="flex flex-col items-center text-center px-4 py-24"
+      >
+        <h1 className="text-5xl font-extrabold mb-6">Welcome to <br /> ReferralStack</h1>
+        <p className="text-gray-600 text-xl mb-8">Manage and share your referral links in one place</p>
+        <Link to="/register">
+          <Button>Get Started</Button>
+        </Link>
+      </motion.section>
 
       {/* Features Section */}
-      <section className="bg-gray-50 py-16 px-4">
-        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-          <div className="p-6 rounded-lg hover:bg-white transition-colors duration-200">
-            <h3 className="text-2xl font-semibold mb-2 text-gray-900">Stack Links</h3>
-            <p className="text-gray-600">Save and organize all your favorite referral codes in one clean place.</p>
-          </div>
-          <div className="p-6 rounded-lg hover:bg-white transition-colors duration-200">
-            <h3 className="text-2xl font-semibold mb-2 text-gray-900">Share Easily</h3>
-            <p className="text-gray-600">One simple profile to share your entire referral network professionally.</p>
-          </div>
-          <div className="p-6 rounded-lg hover:bg-white transition-colors duration-200">
-            <h3 className="text-2xl font-semibold mb-2 text-gray-900">Grow Your Rewards</h3>
-            <p className="text-gray-600">Make the most of your referrals by showcasing them elegantly.</p>
+      <section className="bg-white py-20 px-6">
+        <div className="max-w-6xl mx-auto">
+          <motion.h2 
+            initial={{ opacity: 0 }} 
+            whileInView={{ opacity: 1 }} 
+            viewport={{ once: true }} 
+            className="text-3xl font-bold text-center mb-16"
+          >Features</motion.h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+            {[
+              { icon: "🗂️", title: "Stack Links", desc: "Organize all your referral links with ease." },
+              { icon: "🔗", title: "Share Easily", desc: "Quickly share your links with a few clicks." },
+              { icon: "📈", title: "Grow Rewards", desc: "Boost your growth and earn rewards." }
+            ].map((item, index) => (
+              <motion.div 
+                key={index} 
+                whileHover={{ scale: 1.05 }} 
+                className="p-8 border rounded-lg text-center shadow-sm hover:shadow-lg transition"
+              >
+                <div className="mb-4 text-4xl">{item.icon}</div>
+                <h3 className="font-semibold text-xl mb-2">{item.title}</h3>
+                <p className="text-gray-600">{item.desc}</p>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* About Section */}
-      <section className="py-20 px-4 text-center">
-        <div className="max-w-3xl mx-auto">
-          <h2 className="text-3xl font-bold mb-4 text-gray-900">What is ReferralStack?</h2>
-          <p className="text-gray-700 text-lg">
-            ReferralStack is a simple, powerful platform where you can collect and manage all your referral links. 
-            Whether it's for apps, services, or stores — organize them in one clean, shareable space.
-          </p>
+      {/* How it Works Section */}
+      <section className="py-20 px-6">
+        <div className="max-w-6xl mx-auto">
+          <motion.h2 
+            initial={{ opacity: 0 }} 
+            whileInView={{ opacity: 1 }} 
+            viewport={{ once: true }} 
+            className="text-3xl font-bold text-center mb-16"
+          >How it Works</motion.h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+            {[
+              { step: "1", title: "Sign Up", desc: "Create your free account in just seconds." },
+              { step: "2", title: "Stack", desc: "Add all your referral links to your dashboard." },
+              { step: "3", title: "Share", desc: "Start sharing your links and earn rewards." }
+            ].map((item, index) => (
+              <motion.div 
+                key={index} 
+                whileHover={{ scale: 1.05 }} 
+                className="text-center"
+              >
+                <div className="text-3xl font-bold mb-4">{item.step}</div>
+                <h4 className="font-semibold text-xl mb-2">{item.title}</h4>
+                <p className="text-gray-600">{item.desc}</p>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* Call to Action Section */}
-      <section className="py-16 bg-indigo-600 text-white text-center">
-        <h2 className="text-3xl font-bold mb-4">Ready to Build Your Stack?</h2>
-        {!user ? (
-          <Link to="/register">
-            <button className="bg-white text-indigo-600 hover:bg-gray-100 px-8 py-3 rounded-md text-lg font-medium transition-colors duration-200">
-              Create Your Stack
-            </button>
-          </Link>
-        ) : (
-          <Link to="/home">
-            <button className="bg-white text-indigo-600 hover:bg-gray-100 px-8 py-3 rounded-md text-lg font-medium transition-colors duration-200">
-              View Your Stack
-            </button>
-          </Link>
-        )}
+      {/* Testimonial Section */}
+      <section className="bg-white py-20 px-6">
+        <motion.div 
+          initial={{ opacity: 0 }} 
+          whileInView={{ opacity: 1 }} 
+          viewport={{ once: true }} 
+          className="max-w-3xl mx-auto text-center"
+        >
+          <p className="text-2xl italic mb-6">“ReferralStack has made managing my links so much easier and more effective.”</p>
+          <p className="font-bold">John Doe</p>
+        </motion.div>
       </section>
 
-      {/* Footer */}
-      <footer className="py-6 text-center text-gray-500 text-sm">
-        <div className="flex justify-center gap-4 mb-2">
-          <Link to="/privacy" className="hover:text-gray-700 transition-colors duration-200">Privacy</Link>
-          <span>|</span>
-          <Link to="/terms" className="hover:text-gray-700 transition-colors duration-200">Terms</Link>
-        </div>
-        <p>&copy; {new Date().getFullYear()} ReferralStack. All rights reserved.</p>
-      </footer>
+      {/* CTA Section */}
+      <motion.section 
+        initial={{ opacity: 0 }} 
+        whileInView={{ opacity: 1 }} 
+        viewport={{ once: true }} 
+        className="py-20 px-6 text-center"
+      >
+        <h2 className="text-3xl font-bold mb-6">Get Started Today</h2>
+        <p className="text-gray-600 mb-8">Sign up now and take control of your referral links</p>
+        <Link to="/register">
+          <Button className="px-8 py-4 text-lg">Get Started</Button>
+        </Link>
+      </motion.section>
     </div>
   );
 } 
