@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../utils/supabaseClient';
-import ReferralCard from './ReferralCard';
+import ReferralCard from '../referralstack_components/ReferralCard';
 import { useAuth } from '../context/AuthContext';
 
 export default function ReferralGrid() {
