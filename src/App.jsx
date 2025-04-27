@@ -10,35 +10,24 @@ import 'react-toastify/dist/ReactToastify.css';
 import Privacy from './pages/Privacy';
 import Terms from './pages/Terms';
 
-// Protected Route component
-const ProtectedRoute = ({ children }) => {
+// Protected Feature component (for features that require auth)
+const ProtectedFeature = ({ children }) => {
   const { user } = useAuth();
-  return user ? children : <Navigate to="/" />;
+  return user ? children : <Navigate to="/login" />;
 };
 
 const App = () => {
-  const { isAuthenticated } = useAuth();
-
   return (
     <Router>
       <div className="min-h-screen">
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<Landing />} />
-          <Route path="/login" element={!isAuthenticated ? <Login /> : <Navigate to="/home" />} />
-          <Route path="/register" element={!isAuthenticated ? <Register /> : <Navigate to="/home" />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/terms" element={<Terms />} />
-          
-          {/* Protected Routes */}
-          <Route 
-            path="/home" 
-            element={
-              <ProtectedRoute>
-                <Home />
-              </ProtectedRoute>
-            } 
-          />
           
           {/* Catch all route */}
           <Route path="*" element={<Navigate to="/" />} />

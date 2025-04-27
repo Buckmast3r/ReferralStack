@@ -6,39 +6,61 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const session = supabase.auth.session();
-        setUser(session?.user || null);
-        setIsAuthenticated(!!session?.user);
+        // Check active session
+        const checkSession = async () => {
+            try {
+                const { data: { session }, error } = await supabase.auth.getSession();
+                if (error) throw error;
+                
+                setUser(session?.user || null);
+                setIsAuthenticated(!!session?.user);
+            } catch (error) {
+                console.error('Error checking session:', error.message);
+            } finally {
+                setLoading(false);
+            }
+        };
 
-        const { data: subscription } = supabase.auth.onAuthStateChange((_event, session) => {
+        checkSession();
+
+        // Listen for auth changes
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
             setUser(session?.user || null);
             setIsAuthenticated(!!session?.user);
+            setLoading(false);
         });
 
-        return () => subscription.unsubscribe();
+        return () => {
+            subscription?.unsubscribe();
+        };
     }, []);
 
     const login = async (email, password) => {
         try {
-            const { user, error } = await supabase.auth.signIn({ email, password });
+            const { data, error } = await supabase.auth.signInWithPassword({ email, password });
             if (error) throw error;
-            setUser(user);
+            setUser(data.user);
             setIsAuthenticated(true);
+            return { success: true };
         } catch (error) {
             console.error('Login error:', error.message);
+            return { success: false, error: error.message };
         }
     };
 
     const register = async (email, password) => {
         try {
-            const { user, error } = await supabase.auth.signUp({ email, password });
+            const { data, error } = await supabase.auth.signUp({ email, password });
             if (error) throw error;
-            setUser(user);
+            setUser(data.user);
             setIsAuthenticated(true);
+            return { success: true };
         } catch (error) {
             console.error('Registration error:', error.message);
+            return { success: false, error: error.message };
         }
     };
 
@@ -48,14 +70,17 @@ export const AuthProvider = ({ children }) => {
             if (error) throw error;
             setUser(null);
             setIsAuthenticated(false);
+            return { success: true };
         } catch (error) {
             console.error('Logout error:', error.message);
+            return { success: false, error: error.message };
         }
     };
 
     const value = {
         user,
         isAuthenticated,
+        loading,
         login,
         register,
         logout
@@ -63,7 +88,7 @@ export const AuthProvider = ({ children }) => {
 
     return (
         <AuthContext.Provider value={value}>
-            {children}
+            {!loading && children}
         </AuthContext.Provider>
     );
 };
