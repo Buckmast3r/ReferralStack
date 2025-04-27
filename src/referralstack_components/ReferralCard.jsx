@@ -45,19 +45,19 @@ export default function ReferralCard({ referral }) {
           <img 
             src={favicon} 
             alt={`${referral.app} favicon`} 
-            className="w-6 h-6 mt-1"
+            className="w-6 h-6 mt-1 flex-shrink-0"
           />
         )}
-        <div className="flex-1">
-          <h3 className="text-lg font-semibold text-gray-900">{referral.app}</h3>
-          <p className="text-sm text-gray-600 mt-1">{referral.desc}</p>
+        <div className="flex-1 min-w-0">
+          <h3 className="text-lg font-semibold text-gray-900 truncate">{referral.app}</h3>
+          <p className="text-sm text-gray-600 mt-1 line-clamp-2">{referral.desc}</p>
         </div>
       </div>
       
       <div className="flex items-center justify-between pt-2 border-t border-gray-100">
         <button
           onClick={copyToClipboard}
-          className="flex items-center space-x-2 text-sm text-gray-600 hover:text-gray-900 transition-colors duration-200"
+          className="flex items-center space-x-2 text-sm text-gray-600 hover:text-gray-900 transition-colors duration-200 px-3 py-1.5 rounded-md hover:bg-gray-50"
         >
           <svg 
             className="w-4 h-4" 
@@ -73,16 +73,18 @@ export default function ReferralCard({ referral }) {
               d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" 
             />
           </svg>
-          <span>{isCopied ? 'Copied!' : 'Copy Link'}</span>
+          <span className="hidden sm:inline">{isCopied ? 'Copied!' : 'Copy Link'}</span>
+          <span className="sm:hidden">{isCopied ? '✓' : 'Copy'}</span>
         </button>
         
         <a 
           href={referral.link} 
           target="_blank" 
           rel="noopener noreferrer" 
-          className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200"
+          className="inline-flex items-center px-3 sm:px-4 py-1.5 sm:py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200"
         >
-          Sign Up
+          <span className="hidden sm:inline">Sign Up</span>
+          <span className="sm:hidden">Go</span>
           <svg 
             className="ml-2 -mr-1 w-4 h-4" 
             fill="none" 
