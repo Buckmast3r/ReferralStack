@@ -5,13 +5,16 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     useEffect(() => {
         const session = supabase.auth.session();
         setUser(session?.user || null);
+        setIsAuthenticated(!!session?.user);
 
         const { data: subscription } = supabase.auth.onAuthStateChange((_event, session) => {
             setUser(session?.user || null);
+            setIsAuthenticated(!!session?.user);
         });
 
         return () => subscription.unsubscribe();
@@ -22,6 +25,7 @@ export const AuthProvider = ({ children }) => {
             const { user, error } = await supabase.auth.signIn({ email, password });
             if (error) throw error;
             setUser(user);
+            setIsAuthenticated(true);
         } catch (error) {
             console.error('Login error:', error.message);
         }
@@ -32,6 +36,7 @@ export const AuthProvider = ({ children }) => {
             const { user, error } = await supabase.auth.signUp({ email, password });
             if (error) throw error;
             setUser(user);
+            setIsAuthenticated(true);
         } catch (error) {
             console.error('Registration error:', error.message);
         }
@@ -42,16 +47,31 @@ export const AuthProvider = ({ children }) => {
             const { error } = await supabase.auth.signOut();
             if (error) throw error;
             setUser(null);
+            setIsAuthenticated(false);
         } catch (error) {
             console.error('Logout error:', error.message);
         }
     };
 
+    const value = {
+        user,
+        isAuthenticated,
+        login,
+        register,
+        logout
+    };
+
     return (
-        <AuthContext.Provider value={{ user, login, register, logout }}>
+        <AuthContext.Provider value={value}>
             {children}
         </AuthContext.Provider>
     );
 };
 
-export const useAuth = () => useContext(AuthContext);
+export const useAuth = () => {
+    const context = useContext(AuthContext);
+    if (!context) {
+        throw new Error('useAuth must be used within an AuthProvider');
+    }
+    return context;
+};
