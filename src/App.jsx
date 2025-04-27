@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider, useAuth } from './context/AuthContext';
+import { useAuth } from './context/AuthContext';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -20,34 +20,32 @@ const App = () => {
   const { isAuthenticated } = useAuth();
 
   return (
-    <AuthProvider>
-      <Router>
-        <div className="min-h-screen">
-          <Routes>
-            {/* Public Routes */}
-            <Route path="/" element={<Landing />} />
-            <Route path="/login" element={!isAuthenticated ? <Login /> : <Navigate to="/home" />} />
-            <Route path="/register" element={!isAuthenticated ? <Register /> : <Navigate to="/home" />} />
-            <Route path="/privacy" element={<Privacy />} />
-            <Route path="/terms" element={<Terms />} />
-            
-            {/* Protected Routes */}
-            <Route 
-              path="/home" 
-              element={
-                <ProtectedRoute>
-                  <Home />
-                </ProtectedRoute>
-              } 
-            />
-            
-            {/* Catch all route */}
-            <Route path="*" element={<Navigate to="/" />} />
-          </Routes>
-          <ToastContainer position="bottom-right" />
-        </div>
-      </Router>
-    </AuthProvider>
+    <Router>
+      <div className="min-h-screen">
+        <Routes>
+          {/* Public Routes */}
+          <Route path="/" element={<Landing />} />
+          <Route path="/login" element={!isAuthenticated ? <Login /> : <Navigate to="/home" />} />
+          <Route path="/register" element={!isAuthenticated ? <Register /> : <Navigate to="/home" />} />
+          <Route path="/privacy" element={<Privacy />} />
+          <Route path="/terms" element={<Terms />} />
+          
+          {/* Protected Routes */}
+          <Route 
+            path="/home" 
+            element={
+              <ProtectedRoute>
+                <Home />
+              </ProtectedRoute>
+            } 
+          />
+          
+          {/* Catch all route */}
+          <Route path="*" element={<Navigate to="/" />} />
+        </Routes>
+        <ToastContainer position="bottom-right" />
+      </div>
+    </Router>
   );
 };
 
