@@ -4,7 +4,7 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import LandingPage from './pages/LandingPage';
+import Landing from './pages/Landing';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Privacy from './pages/Privacy';
@@ -25,7 +25,7 @@ const App = () => {
         <div className="min-h-screen">
           <Routes>
             {/* Public Routes */}
-            <Route path="/" element={<LandingPage />} />
+            <Route path="/" element={<Landing />} />
             <Route path="/login" element={!isAuthenticated ? <Login /> : <Navigate to="/home" />} />
             <Route path="/register" element={!isAuthenticated ? <Register /> : <Navigate to="/home" />} />
             <Route path="/privacy" element={<Privacy />} />
