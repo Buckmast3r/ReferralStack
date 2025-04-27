@@ -1,26 +1,29 @@
--- Enable Row Level Security
+-- 1. Fix user_id type
+ALTER TABLE referrals ALTER COLUMN user_id TYPE uuid USING user_id::uuid;
+
+-- 2. Enable RLS
 ALTER TABLE referrals ENABLE ROW LEVEL SECURITY;
 
--- Create policies for referrals table
+-- 3. Create Policies
 CREATE POLICY "Users can view their own referrals"
-  ON referrals FOR SELECT
-  USING (auth.uid() = user_id);
+ON referrals FOR SELECT TO authenticated
+USING ((SELECT auth.uid()) = user_id);
 
 CREATE POLICY "Users can insert their own referrals"
-  ON referrals FOR INSERT
-  WITH CHECK (auth.uid() = user_id);
+ON referrals FOR INSERT TO authenticated
+WITH CHECK ((SELECT auth.uid()) = user_id);
 
 CREATE POLICY "Users can update their own referrals"
-  ON referrals FOR UPDATE
-  USING (auth.uid() = user_id)
-  WITH CHECK (auth.uid() = user_id);
+ON referrals FOR UPDATE TO authenticated
+USING ((SELECT auth.uid()) = user_id)
+WITH CHECK ((SELECT auth.uid()) = user_id);
 
 CREATE POLICY "Users can delete their own referrals"
-  ON referrals FOR DELETE
-  USING (auth.uid() = user_id);
+ON referrals FOR DELETE TO authenticated
+USING ((SELECT auth.uid()) = user_id);
 
--- Create an index on user_id for better performance
-CREATE INDEX idx_referrals_user_id ON referrals(user_id);
+-- 4. Create index
+CREATE INDEX IF NOT EXISTS idx_referrals_user_id ON referrals(user_id);
 
 -- Add created_at and updated_at triggers if they don't exist
 CREATE OR REPLACE FUNCTION update_updated_at_column()
