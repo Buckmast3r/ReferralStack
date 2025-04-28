@@ -9,7 +9,6 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Privacy from './pages/Privacy';
 import Terms from './pages/Terms';
-import { insertProfile } from '../utils/insertProfile';
 import Pricing from './pages/Pricing';
 
 // Protected Feature component (for features that require auth)
