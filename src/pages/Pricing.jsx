@@ -1,6 +1,7 @@
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import Button from '../components/Button';
 
 export default function PricingPage() {
   return (
@@ -15,8 +16,8 @@ export default function PricingPage() {
       {/* Pricing Cards Grid */}
       <div className="grid md:grid-cols-3 gap-8">
         {/* Starter Plan */}
-        <Card className="border border-gray-200">
-          <CardContent className="p-6 flex flex-col items-center">
+        <div className="border border-gray-200">
+          <div className="p-6 flex flex-col items-center">
             <h2 className="text-2xl font-bold mb-2">Starter</h2>
             <p className="text-gray-500 mb-4">Perfect for individuals exploring referral stacking. Get started for free.</p>
             <p className="text-3xl font-bold mb-4">$0<span className="text-lg font-normal">/mo</span></p>
@@ -37,12 +38,12 @@ export default function PricingPage() {
               <li className="text-gray-400">✗ Advanced customization
               </li>
             </ul>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
         {/* Pro Plan (Highlighted) */}
-        <Card className="border-2 border-blue-600 shadow-lg relative">
-          <CardContent className="p-6 flex flex-col items-center">
+        <div className="border-2 border-blue-600 shadow-lg relative">
+          <div className="p-6 flex flex-col items-center">
             <span className="absolute -top-4 bg-blue-600 text-white px-4 py-1 text-sm rounded-full">Most Popular</span>
             <h2 className="text-2xl font-bold mb-2">Pro</h2>
             <p className="text-gray-500 mb-4">For serious users ready to optimize and grow their reach.</p>
@@ -64,12 +65,12 @@ export default function PricingPage() {
               <li className="text-gray-400">✗ Advanced customization
               </li>
             </ul>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
         {/* Unlimited Plan */}
-        <Card className="border border-gray-200">
-          <CardContent className="p-6 flex flex-col items-center">
+        <div className="border border-gray-200">
+          <div className="p-6 flex flex-col items-center">
             <h2 className="text-2xl font-bold mb-2">Unlimited</h2>
             <p className="text-gray-500 mb-4">Unlock full potential — maximum features, no limits, ultimate flexibility.</p>
             <p className="text-3xl font-bold mb-4">$49<span className="text-lg font-normal">/mo</span></p>
@@ -90,8 +91,8 @@ export default function PricingPage() {
               <li>✓ Advanced customization
               </li>
             </ul>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
 
       {/* Small Notes */}
@@ -103,24 +104,24 @@ export default function PricingPage() {
       <div className="mt-16">
         <h2 className="text-2xl font-bold mb-4 text-center">Optional Add-ons</h2>
         <div className="grid md:grid-cols-3 gap-6">
-          <Card className="border border-gray-200">
-            <CardContent className="p-6">
+          <div className="border border-gray-200">
+            <div className="p-6">
               <h3 className="text-xl font-bold mb-2">Custom Domain</h3>
               <p className="text-gray-500 mb-4">Use your own domain for $5/mo extra.</p>
-            </CardContent>
-          </Card>
-          <Card className="border border-gray-200">
-            <CardContent className="p-6">
+            </div>
+          </div>
+          <div className="border border-gray-200">
+            <div className="p-6">
               <h3 className="text-xl font-bold mb-2">White-label Option</h3>
               <p className="text-gray-500 mb-4">Remove all branding for $10/mo extra.</p>
-            </CardContent>
-          </Card>
-          <Card className="border border-gray-200">
-            <CardContent className="p-6">
+            </div>
+          </div>
+          <div className="border border-gray-200">
+            <div className="p-6">
               <h3 className="text-xl font-bold mb-2">Developer API Access</h3>
               <p className="text-gray-500 mb-4">Integrate via API for $25/mo extra.</p>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         </div>
       </div>
     </div>
