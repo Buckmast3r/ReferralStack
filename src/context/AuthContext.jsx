@@ -70,10 +70,8 @@ export const AuthProvider = ({ children }) => {
             if (error) throw error;
             setUser(null);
             setIsAuthenticated(false);
-            return { success: true };
         } catch (error) {
             console.error('Logout error:', error.message);
-            return { success: false, error: error.message };
         }
     };
 

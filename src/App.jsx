@@ -9,6 +9,8 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Privacy from './pages/Privacy';
 import Terms from './pages/Terms';
+import { insertProfile } from '../utils/insertProfile';
+import Pricing from './pages/Pricing';
 
 // Protected Feature component (for features that require auth)
 const ProtectedFeature = ({ children }) => {
@@ -28,6 +30,7 @@ const App = () => {
           <Route path="/register" element={<Register />} />
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/terms" element={<Terms />} />
+          <Route path="/pricing" element={<Pricing />} />
           
           {/* Catch all route */}
           <Route path="*" element={<Navigate to="/" />} />
