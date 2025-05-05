@@ -1,6 +1,4 @@
 import React from 'react';
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import Button from '../components/Button';
 
 export default function PricingPage() {
@@ -16,33 +14,26 @@ export default function PricingPage() {
       {/* Pricing Cards Grid */}
       <div className="grid md:grid-cols-3 gap-8">
         {/* Starter Plan */}
-        <div className="border border-gray-200">
+        <div className="border border-gray-200 rounded-lg shadow-sm">
           <div className="p-6 flex flex-col items-center">
             <h2 className="text-2xl font-bold mb-2">Starter</h2>
             <p className="text-gray-500 mb-4">Perfect for individuals exploring referral stacking. Get started for free.</p>
             <p className="text-3xl font-bold mb-4">$0<span className="text-lg font-normal">/mo</span></p>
             <Button className="mb-6 w-full">Get Started</Button>
             <ul className="space-y-2 text-gray-600">
-              <li>✓ Create referral cards
-              </li>
-              <li className="text-gray-400">✗ Share unlimited referral links
-              </li>
-              <li className="text-gray-400">✗ Custom branding
-              </li>
-              <li className="text-gray-400">✗ Analytics (views, clicks)
-              </li>
-              <li className="text-gray-400">✗ Priority support
-              </li>
-              <li className="text-gray-400">✗ Team collaboration
-              </li>
-              <li className="text-gray-400">✗ Advanced customization
-              </li>
+              <li>✓ Create referral cards</li>
+              <li className="text-gray-400">✗ Share unlimited referral links</li>
+              <li className="text-gray-400">✗ Custom branding</li>
+              <li className="text-gray-400">✗ Analytics (views, clicks)</li>
+              <li className="text-gray-400">✗ Priority support</li>
+              <li className="text-gray-400">✗ Team collaboration</li>
+              <li className="text-gray-400">✗ Advanced customization</li>
             </ul>
           </div>
         </div>
 
         {/* Pro Plan (Highlighted) */}
-        <div className="border-2 border-blue-600 shadow-lg relative">
+        <div className="border-2 border-blue-600 rounded-lg shadow-lg relative">
           <div className="p-6 flex flex-col items-center">
             <span className="absolute -top-4 bg-blue-600 text-white px-4 py-1 text-sm rounded-full">Most Popular</span>
             <h2 className="text-2xl font-bold mb-2">Pro</h2>
@@ -50,46 +41,32 @@ export default function PricingPage() {
             <p className="text-3xl font-bold mb-4">$19<span className="text-lg font-normal">/mo</span></p>
             <Button className="mb-6 w-full bg-blue-600 hover:bg-blue-700">Go Pro</Button>
             <ul className="space-y-2 text-gray-600">
-              <li>✓ Create referral cards
-              </li>
-              <li>✓ Share unlimited referral links
-              </li>
-              <li>✓ Custom branding
-              </li>
-              <li>✓ Analytics (views, clicks)
-              </li>
-              <li className="text-gray-400">✗ Priority support
-              </li>
-              <li className="text-gray-400">✗ Team collaboration
-              </li>
-              <li className="text-gray-400">✗ Advanced customization
-              </li>
+              <li>✓ Create referral cards</li>
+              <li>✓ Share unlimited referral links</li>
+              <li>✓ Custom branding</li>
+              <li>✓ Analytics (views, clicks)</li>
+              <li className="text-gray-400">✗ Priority support</li>
+              <li className="text-gray-400">✗ Team collaboration</li>
+              <li className="text-gray-400">✗ Advanced customization</li>
             </ul>
           </div>
         </div>
 
         {/* Unlimited Plan */}
-        <div className="border border-gray-200">
+        <div className="border border-gray-200 rounded-lg shadow-sm">
           <div className="p-6 flex flex-col items-center">
             <h2 className="text-2xl font-bold mb-2">Unlimited</h2>
             <p className="text-gray-500 mb-4">Unlock full potential — maximum features, no limits, ultimate flexibility.</p>
             <p className="text-3xl font-bold mb-4">$49<span className="text-lg font-normal">/mo</span></p>
             <Button className="mb-6 w-full">Unlock Unlimited</Button>
             <ul className="space-y-2 text-gray-600">
-              <li>✓ Create referral cards
-              </li>
-              <li>✓ Share unlimited referral links
-              </li>
-              <li>✓ Custom branding
-              </li>
-              <li>✓ Analytics (views, clicks)
-              </li>
-              <li>✓ Priority support
-              </li>
-              <li>✓ Team collaboration
-              </li>
-              <li>✓ Advanced customization
-              </li>
+              <li>✓ Create referral cards</li>
+              <li>✓ Share unlimited referral links</li>
+              <li>✓ Custom branding</li>
+              <li>✓ Analytics (views, clicks)</li>
+              <li>✓ Priority support</li>
+              <li>✓ Team collaboration</li>
+              <li>✓ Advanced customization</li>
             </ul>
           </div>
         </div>
@@ -104,19 +81,19 @@ export default function PricingPage() {
       <div className="mt-16">
         <h2 className="text-2xl font-bold mb-4 text-center">Optional Add-ons</h2>
         <div className="grid md:grid-cols-3 gap-6">
-          <div className="border border-gray-200">
+          <div className="border border-gray-200 rounded-lg shadow-sm">
             <div className="p-6">
               <h3 className="text-xl font-bold mb-2">Custom Domain</h3>
               <p className="text-gray-500 mb-4">Use your own domain for $5/mo extra.</p>
             </div>
           </div>
-          <div className="border border-gray-200">
+          <div className="border border-gray-200 rounded-lg shadow-sm">
             <div className="p-6">
               <h3 className="text-xl font-bold mb-2">White-label Option</h3>
               <p className="text-gray-500 mb-4">Remove all branding for $10/mo extra.</p>
             </div>
           </div>
-          <div className="border border-gray-200">
+          <div className="border border-gray-200 rounded-lg shadow-sm">
             <div className="p-6">
               <h3 className="text-xl font-bold mb-2">Developer API Access</h3>
               <p className="text-gray-500 mb-4">Integrate via API for $25/mo extra.</p>
