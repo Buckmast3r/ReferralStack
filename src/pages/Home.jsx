@@ -39,7 +39,7 @@ export default function Home() {
 
             // Fetch user's referral cards
             const { data: cards, error: cardsError } = await supabase
-                .from('referral_cards')
+                .from('referrals')
                 .select('*')
                 .eq('user_id', user.id)
                 .order('created_at', { ascending: false });
