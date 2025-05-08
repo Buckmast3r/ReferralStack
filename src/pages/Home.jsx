@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { supabase } from '../config/supabaseClient';
 import Button from '../components/Button';
@@ -8,8 +8,11 @@ import AddReferralModal from '../components/AddReferralModal';
 
 export default function Home() {
     const { user, isAuthenticated } = useAuth();
+    const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     const [referralCards, setReferralCards] = useState([]);
+    const [showAddModal, setShowAddModal] = useState(false);
     const [stats, setStats] = useState({
         totalViews: 0,
         totalClicks: 0,
@@ -17,13 +20,23 @@ export default function Home() {
     });
 
     useEffect(() => {
+        if (!isAuthenticated) {
+            navigate('/login');
+            return;
+        }
         fetchUserData();
-    }, [user]);
+    }, [user, isAuthenticated, navigate]);
 
     const fetchUserData = async () => {
         try {
             setLoading(true);
+            setError(null);
             
+            if (!user?.id) {
+                console.error('No user ID available');
+                return;
+            }
+
             // Fetch user's referral cards
             const { data: cards, error: cardsError } = await supabase
                 .from('referral_cards')
@@ -31,8 +44,12 @@ export default function Home() {
                 .eq('user_id', user.id)
                 .order('created_at', { ascending: false });
 
-            if (cardsError) throw cardsError;
+            if (cardsError) {
+                console.error('Error fetching cards:', cardsError);
+                throw cardsError;
+            }
             
+            console.log('Fetched cards:', cards); // Debug log
             setReferralCards(cards || []);
             
             // Calculate stats
@@ -46,16 +63,47 @@ export default function Home() {
             });
             
         } catch (error) {
-            console.error('Error fetching user data:', error);
+            console.error('Error in fetchUserData:', error);
+            setError('Failed to load your data. Please try refreshing the page.');
         } finally {
             setLoading(false);
         }
     };
 
+    const handleAddCard = () => {
+        setShowAddModal(true);
+    };
+
+    const handleModalClose = () => {
+        setShowAddModal(false);
+        fetchUserData(); // Refresh data after modal closes
+    };
+
+    if (!isAuthenticated) {
+        return null; // Will redirect in useEffect
+    }
+
     if (loading) {
         return (
             <div className="flex items-center justify-center min-h-screen">
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="max-w-7xl mx-auto p-6">
+                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded relative" role="alert">
+                    <strong className="font-bold">Error: </strong>
+                    <span className="block sm:inline">{error}</span>
+                    <button 
+                        onClick={fetchUserData}
+                        className="mt-2 bg-red-100 hover:bg-red-200 text-red-800 font-semibold py-2 px-4 rounded"
+                    >
+                        Try Again
+                    </button>
+                </div>
             </div>
         );
     }
@@ -86,7 +134,10 @@ export default function Home() {
 
             {/* Actions Section */}
             <div className="mb-8">
-                <Button className="bg-blue-600 hover:bg-blue-700">
+                <Button 
+                    onClick={handleAddCard}
+                    className="bg-blue-600 hover:bg-blue-700"
+                >
                     Create New Referral Card
                 </Button>
             </div>
@@ -97,7 +148,10 @@ export default function Home() {
                 {referralCards.length === 0 ? (
                     <div className="text-center py-12 bg-gray-50 rounded-lg border border-gray-200">
                         <p className="text-gray-600 mb-4">You haven't created any referral cards yet.</p>
-                        <Button className="bg-blue-600 hover:bg-blue-700">
+                        <Button 
+                            onClick={handleAddCard}
+                            className="bg-blue-600 hover:bg-blue-700"
+                        >
                             Create Your First Card
                         </Button>
                     </div>
@@ -120,6 +174,14 @@ export default function Home() {
                     </div>
                 )}
             </div>
+
+            {/* Add Referral Modal */}
+            {showAddModal && (
+                <AddReferralModal 
+                    onClose={handleModalClose}
+                    onAdded={handleModalClose}
+                />
+            )}
         </div>
     );
 }
