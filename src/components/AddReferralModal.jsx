@@ -2,6 +2,11 @@ import React, { useState } from 'react';
 import { supabase } from '../utils/supabaseClient';
 import { useAuth } from '../context/AuthContext';
 
+// Function to generate a unique ID
+function generateUniqueId() {
+  return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+}
+
 export default function AddReferralModal({ onClose, onAdded }) {
   const { user } = useAuth();
   const [title, setTitle] = useState('');
@@ -21,6 +26,7 @@ export default function AddReferralModal({ onClose, onAdded }) {
         .from('referrals')
         .insert([
           {
+            id: generateUniqueId(),
             user_id: user.id,
             title,
             url,
