@@ -10,6 +10,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Privacy from './pages/Privacy';
 import Terms from './pages/Terms';
 import Pricing from './pages/Pricing';
+import PublicReferralCard from './pages/PublicReferralCard';
 
 // Protected Feature component (for features that require auth)
 const ProtectedFeature = ({ children }) => {
@@ -30,6 +31,7 @@ const App = () => {
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/terms" element={<Terms />} />
           <Route path="/pricing" element={<Pricing />} />
+          <Route path="/card/:cardId" element={<PublicReferralCard />} />
           
           {/* Catch all route */}
           <Route path="*" element={<Navigate to="/" />} />

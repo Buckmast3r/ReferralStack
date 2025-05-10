@@ -10,14 +10,31 @@ function generateUniqueId() {
 export default function AddReferralModal({ onClose, onAdded }) {
   const { user } = useAuth();
   const [title, setTitle] = useState('');
-  const [url, setUrl] = useState('');
+  const [description, setDescription] = useState('');
+  const [links, setLinks] = useState([{ label: '', url: '' }]);
   const [imageUrl, setImageUrl] = useState('');
   const [error, setError] = useState('');
 
+  const handleLinkChange = (idx, field, value) => {
+    setLinks((prev) => prev.map((link, i) => i === idx ? { ...link, [field]: value } : link));
+  };
+
+  const addLink = () => {
+    if (links.length < 3) setLinks([...links, { label: '', url: '' }]);
+  };
+
+  const removeLink = (idx) => {
+    if (links.length > 1) setLinks(links.filter((_, i) => i !== idx));
+  };
+
   async function handleAddReferral(e) {
     e.preventDefault();
-    if (!title || !url) {
-      setError('Title and URL are required.');
+    if (!title) {
+      setError('Title is required.');
+      return;
+    }
+    if (links.length === 0 || links.some(link => !link.label || !link.url)) {
+      setError('Each link must have a label and a URL.');
       return;
     }
 
@@ -29,7 +46,8 @@ export default function AddReferralModal({ onClose, onAdded }) {
             id: generateUniqueId(),
             user_id: user.id,
             title,
-            url,
+            description,
+            links,
             image_url: imageUrl || null,
             created_at: new Date().toISOString(),
           },
@@ -40,7 +58,8 @@ export default function AddReferralModal({ onClose, onAdded }) {
         setError(insertError.message);
       } else {
         setTitle('');
-        setUrl('');
+        setDescription('');
+        setLinks([{ label: '', url: '' }]);
         setImageUrl('');
         setError('');
         if (onAdded) onAdded();
@@ -74,19 +93,47 @@ export default function AddReferralModal({ onClose, onAdded }) {
               onChange={(e) => setTitle(e.target.value)}
               required
               className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              placeholder="Enter referral title"
+              placeholder="Enter referral card title"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">URL</label>
-            <input
-              type="url"
-              value={url}
-              onChange={(e) => setUrl(e.target.value)}
-              required
+            <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              placeholder="Enter referral URL"
+              placeholder="Describe this referral card"
+              rows={2}
             />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Referral Links (up to 3)</label>
+            {links.map((link, idx) => (
+              <div key={idx} className="flex gap-2 mb-2 items-center">
+                <input
+                  type="text"
+                  value={link.label}
+                  onChange={e => handleLinkChange(idx, 'label', e.target.value)}
+                  placeholder="Link label (e.g. Sofi)"
+                  className="flex-1 px-2 py-1 border border-gray-300 rounded"
+                  required
+                />
+                <input
+                  type="url"
+                  value={link.url}
+                  onChange={e => handleLinkChange(idx, 'url', e.target.value)}
+                  placeholder="https://..."
+                  className="flex-1 px-2 py-1 border border-gray-300 rounded"
+                  required
+                />
+                {links.length > 1 && (
+                  <button type="button" onClick={() => removeLink(idx)} className="text-red-500 px-2">✕</button>
+                )}
+              </div>
+            ))}
+            {links.length < 3 && (
+              <button type="button" onClick={addLink} className="mt-1 text-blue-600 hover:underline text-sm">+ Add another link</button>
+            )}
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Image URL (optional)</label>
