@@ -4,12 +4,15 @@ import ReferralCard from '../referralstack_components/ReferralCard';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
+import EditReferralModal from './EditReferralModal';
 
 export default function ReferralGrid() {
   const { user } = useAuth();
   const [referrals, setReferrals] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [editReferral, setEditReferral] = useState(null);
+  const [deleteReferralId, setDeleteReferralId] = useState(null);
 
   useEffect(() => {
     if (user) {
@@ -27,14 +30,7 @@ export default function ReferralGrid() {
 
       const { data, error } = await supabase
         .from('referrals')
-        .select(`
-          id,
-          title,
-          description,
-          url,
-          created_at,
-          updated_at
-        `)
+        .select('*')
         .eq('user_id', user.id)
         .order('created_at', { ascending: false });
 
@@ -51,6 +47,18 @@ export default function ReferralGrid() {
       });
     } finally {
       setLoading(false);
+    }
+  }
+
+  // Handler for deleting a referral
+  async function handleDeleteReferral(id) {
+    if (!window.confirm('Are you sure you want to delete this referral card?')) return;
+    const { error } = await supabase.from('referrals').delete().eq('id', id);
+    if (error) {
+      toast.error('Failed to delete card');
+    } else {
+      setReferrals(referrals.filter(r => r.id !== id));
+      toast.success('Referral card deleted');
     }
   }
 
@@ -89,14 +97,23 @@ export default function ReferralGrid() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 px-4 sm:px-6">
         {referrals.length > 0 ? (
           referrals.map((referral) => (
-            <ReferralCard
-              key={referral.id}
-              referral={{
-                app: referral.title,
-                desc: referral.description,
-                link: referral.url,
-              }}
-            />
+            <div key={referral.id} className="flex flex-col gap-2">
+              <ReferralCard referral={referral} />
+              <div className="flex gap-2">
+                <button
+                  className="px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700"
+                  onClick={() => setEditReferral(referral)}
+                >
+                  Edit
+                </button>
+                <button
+                  className="px-3 py-1 text-sm bg-red-100 text-red-700 rounded hover:bg-red-200"
+                  onClick={() => handleDeleteReferral(referral.id)}
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
           ))
         ) : (
           <div className="col-span-full text-center py-12">
@@ -127,6 +144,17 @@ export default function ReferralGrid() {
           </svg>
         </Link>
       </div>
+      {/* TODO: Edit modal will go here, using editReferral state */}
+      {editReferral && (
+        <EditReferralModal
+          referral={editReferral}
+          onClose={() => setEditReferral(null)}
+          onUpdated={() => {
+            setEditReferral(null);
+            fetchReferrals();
+          }}
+        />
+      )}
     </div>
   );
 }
