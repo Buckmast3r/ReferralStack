@@ -4,7 +4,6 @@ import { useAuth } from '../context/AuthContext';
 import { supabase } from '../config/supabaseClient';
 import Button from '../components/Button';
 import ReferralGrid from '../components/ReferralGrid';
-import AddReferralModal from '../components/AddReferralModal';
 
 export default function Home() {
     const { user, isAuthenticated } = useAuth();
@@ -174,14 +173,6 @@ export default function Home() {
                     </div>
                 )}
             </div>
-
-            {/* Add Referral Modal */}
-            {showAddModal && (
-                <AddReferralModal 
-                    onClose={handleModalClose}
-                    onAdded={handleModalClose}
-                />
-            )}
         </div>
     );
 }
