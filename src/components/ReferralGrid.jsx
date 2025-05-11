@@ -144,7 +144,7 @@ export default function ReferralGrid() {
           </svg>
         </Link>
       </div>
-      {/* TODO: Edit modal will go here, using editReferral state */}
+      {console.log(editReferral)}
       {editReferral && (
         <EditReferralModal
           referral={editReferral}
