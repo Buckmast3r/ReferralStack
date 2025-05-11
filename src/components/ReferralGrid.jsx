@@ -4,15 +4,15 @@ import ReferralCard from '../referralstack_components/ReferralCard';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
-import EditReferralModal from './EditReferralModal';
+import ReferralModal from './ReferralModal';
 
 export default function ReferralGrid() {
   const { user } = useAuth();
   const [referrals, setReferrals] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [editReferral, setEditReferral] = useState(null);
-  const [deleteReferralId, setDeleteReferralId] = useState(null);
+  const [modalMode, setModalMode] = useState(null); // 'add' or 'edit'
+  const [modalData, setModalData] = useState(null);
 
   useEffect(() => {
     if (user) {
@@ -97,14 +97,14 @@ export default function ReferralGrid() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 px-4 sm:px-6">
         {referrals.length > 0 ? (
           referrals.map((referral) => (
-            <div key={referral.id} className="flex flex-col gap-2">
+            <div key={referral.id} className="flex flex-col gap-2 mb-8">
               <ReferralCard referral={referral} />
-              <div className="flex gap-2 mt-2">
+              <div className="flex gap-2 mt-2 justify-end">
                 <button
                   className="px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700"
                   onClick={() => {
-                    console.log('Edit clicked', referral);
-                    setEditReferral(referral);
+                    setModalMode('edit');
+                    setModalData(referral);
                   }}
                 >
                   Edit
@@ -125,10 +125,13 @@ export default function ReferralGrid() {
         )}
       </div>
 
-      {/* Sticky Add Button */}
+      {/* Add Button */}
       <div className="fixed bottom-6 right-6 z-50">
-        <Link
-          to="/add-referral"
+        <button
+          onClick={() => {
+            setModalMode('add');
+            setModalData(null);
+          }}
           className="inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-indigo-600 text-white shadow-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200"
         >
           <svg
@@ -145,15 +148,21 @@ export default function ReferralGrid() {
               d="M12 6v6m0 0v6m0-6h6m-6 0H6"
             />
           </svg>
-        </Link>
+        </button>
       </div>
-      {console.log(editReferral)}
-      {editReferral && (
-        <EditReferralModal
-          referral={editReferral}
-          onClose={() => setEditReferral(null)}
-          onUpdated={() => {
-            setEditReferral(null);
+      {/* Unified Add/Edit Modal */}
+      {modalMode && (
+        <ReferralModal
+          mode={modalMode}
+          initialData={modalData || {}}
+          userId={user?.id}
+          onClose={() => {
+            setModalMode(null);
+            setModalData(null);
+          }}
+          onSuccess={() => {
+            setModalMode(null);
+            setModalData(null);
             fetchReferrals();
           }}
         />
