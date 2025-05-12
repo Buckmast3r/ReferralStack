@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { useAuth } from './context/AuthContext';
+import { AuthProvider, useAuth } from './context/AuthContext';
+import { SubscriptionProvider } from './context/SubscriptionContext';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -11,6 +12,18 @@ import Privacy from './pages/Privacy';
 import Terms from './pages/Terms';
 import Pricing from './pages/Pricing';
 import PublicReferralCard from './pages/PublicReferralCard';
+import Navbar from './components/Navbar';
+import Profile from './pages/Profile';
+import Landing from './pages/Landing';
+import Footer from './components/Footer';
+import Contact from './pages/Contact';
+import Dashboard from './pages/Dashboard';
+import Onboarding from './components/Onboarding';
+import ReferralCard from './pages/ReferralCard';
+import CreateReferral from './pages/CreateReferral';
+import EditReferral from './pages/EditReferral';
+import Analytics from './pages/Analytics';
+import Monitoring from './pages/Monitoring';
 
 // Protected Feature component (for features that require auth)
 const ProtectedFeature = ({ children }) => {
@@ -18,26 +31,106 @@ const ProtectedFeature = ({ children }) => {
   return user ? children : <Navigate to="/login" />;
 };
 
+const PrivateRoute = ({ children }) => {
+  const { user, loading } = useAuth();
+  const { profile } = useAuth();
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!user) {
+    return <Navigate to="/login" />;
+  }
+
+  // Redirect to onboarding if profile is not set up
+  if (!profile?.username) {
+    return <Navigate to="/onboarding" />;
+  }
+
+  return children;
+};
+
 const App = () => {
   return (
     <Router>
-      <div className="min-h-screen">
-        <Routes>
-          {/* Public Routes */}
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/privacy" element={<Privacy />} />
-          <Route path="/terms" element={<Terms />} />
-          <Route path="/pricing" element={<Pricing />} />
-          <Route path="/card/:cardId" element={<PublicReferralCard />} />
-          
-          {/* Catch all route */}
-          <Route path="*" element={<Navigate to="/" />} />
-        </Routes>
-        <ToastContainer position="bottom-right" />
-      </div>
+      <AuthProvider>
+        <SubscriptionProvider>
+          <div className="min-h-screen flex flex-col">
+            <Navbar />
+            <main className="flex-grow">
+              <Routes>
+                {/* Public Routes */}
+                <Route path="/" element={<Landing />} />
+                <Route path="/home" element={<Home />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/privacy" element={<Privacy />} />
+                <Route path="/terms" element={<Terms />} />
+                <Route path="/pricing" element={<Pricing />} />
+                <Route path="/card/:cardId" element={<PublicReferralCard />} />
+                <Route path="/profile" element={<Profile />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/onboarding" element={<Onboarding />} />
+                <Route path="/card/:id" element={<ReferralCard />} />
+                <Route
+                  path="/dashboard"
+                  element={
+                    <PrivateRoute>
+                      <Dashboard />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="/profile"
+                  element={
+                    <PrivateRoute>
+                      <Profile />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="/create"
+                  element={
+                    <PrivateRoute>
+                      <CreateReferral />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="/edit/:id"
+                  element={
+                    <PrivateRoute>
+                      <EditReferral />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="/analytics"
+                  element={
+                    <PrivateRoute>
+                      <Analytics />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="/monitoring"
+                  element={
+                    <PrivateRoute>
+                      <Monitoring />
+                    </PrivateRoute>
+                  }
+                />
+                {/* Catch all route */}
+                <Route path="*" element={<Navigate to="/" />} />
+              </Routes>
+            </main>
+            <Footer />
+            <ToastContainer position="bottom-right" />
+          </div>
+        </SubscriptionProvider>
+      </AuthProvider>
     </Router>
   );
 };

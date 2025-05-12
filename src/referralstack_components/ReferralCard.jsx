@@ -40,6 +40,11 @@ export default function ReferralCard({ referral }) {
     }
   };
 
+  // Open public preview
+  const openPreview = () => {
+    window.open(`/card/${referral.id}`, '_blank', 'noopener,noreferrer');
+  };
+
   return (
     <div className="bg-white rounded-xl shadow-lg p-6 mb-6 flex flex-col gap-4 hover:shadow-2xl transition-shadow border border-gray-100">
       {/* Card Image */}
@@ -71,21 +76,32 @@ export default function ReferralCard({ referral }) {
             </div>
             <button
               onClick={() => copyLink(link.url, idx)}
-              className="px-2 py-1 text-xs bg-gray-200 rounded hover:bg-gray-300 text-gray-700"
+              className="px-2 py-1 text-xs bg-gray-200 rounded hover:bg-gray-300 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              aria-label={`Copy referral link ${idx + 1}`}
             >
               {copiedLinkIdx === idx ? 'Copied!' : 'Copy'}
             </button>
           </div>
         ))}
       </div>
-      {/* Share Card Button */}
-      <div className="flex justify-between items-center mt-2">
-        <button
-          onClick={copyCardUrl}
-          className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-        >
-          {copiedCard ? 'Card URL Copied!' : 'Share Card'}
-        </button>
+      {/* Share & Preview Buttons */}
+      <div className="flex justify-between items-center mt-2 gap-2">
+        <div className="flex gap-2">
+          <button
+            onClick={copyCardUrl}
+            className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            aria-label="Copy card share URL"
+          >
+            {copiedCard ? 'Card URL Copied!' : 'Share Card'}
+          </button>
+          <button
+            onClick={openPreview}
+            className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            aria-label="Preview public card"
+          >
+            Preview
+          </button>
+        </div>
         <span className="text-xs text-gray-400">Created: {referral.created_at ? new Date(referral.created_at).toLocaleDateString() : ''}</span>
       </div>
     </div>
