@@ -30,13 +30,10 @@ const PublicReferralCard = () => {
     fetchCard();
   }, [cardId]);
 
-  const handleClick = async (linkId) => {
-    setClicked(linkId);
-    await trackClick(linkId);
-    const linkObj = card.links.find(link => link.id === linkId);
-    if (linkObj) {
-      window.open(linkObj.url, '_blank', 'noopener,noreferrer');
-    }
+  const handleClick = async (url, idx) => {
+    setClicked(idx);
+    await trackClick(url);
+    window.open(url, '_blank', 'noopener,noreferrer');
     setTimeout(() => setClicked(null), 1000);
   };
 
@@ -57,17 +54,17 @@ const PublicReferralCard = () => {
         </div>
         <div className="space-y-4">
           {card.links && card.links.length > 0 ? (
-            card.links.map((link) => (
+            card.links.map((link, idx) => (
               <button
-                key={link.id}
-                onClick={() => handleClick(link.id)}
+                key={idx}
+                onClick={() => handleClick(link.url, idx)}
                 className={`block w-full px-6 py-3 rounded-lg font-semibold transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 shadow-sm
-                  ${clicked === link.id ? 'bg-blue-300 text-white' : 'bg-blue-600 text-white hover:bg-blue-700'}`}
+                  ${clicked === idx ? 'bg-blue-300 text-white' : 'bg-blue-600 text-white hover:bg-blue-700'}`}
                 rel="noopener noreferrer"
                 aria-label={`Open referral link: ${link.label}`}
-                disabled={clicked === link.id}
+                disabled={clicked === idx}
               >
-                {clicked === link.id ? 'Opening...' : link.label}
+                {clicked === idx ? 'Opening...' : link.label}
               </button>
             ))
           ) : (
