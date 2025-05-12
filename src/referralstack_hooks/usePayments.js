@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { paymentService } from '../services/paymentService';
+import { paymentService } from '../referralstack_services/paymentService';
 
 export function usePayments() {
   const [processing, setProcessing] = useState(false);

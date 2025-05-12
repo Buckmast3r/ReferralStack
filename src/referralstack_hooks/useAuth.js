@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { authService } from '../services/authService';
+import { authService } from '../referralstack_services/authService';
 
 export function useAuth() {
   const [user, setUser] = useState(null);

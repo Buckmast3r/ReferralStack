@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-import { referralService } from '../services/referralService';
+import { referralService } from '../referralstack_services/referralService';
 
 const ReferralContext = createContext();
 

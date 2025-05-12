@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { referralService } from '../services/referralService';
+import { referralService } from '../referralstack_services/referralService';
 
 export function useReferrals() {
   const [referrals, setReferrals] = useState([]);
