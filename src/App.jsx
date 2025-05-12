@@ -19,7 +19,7 @@ import Footer from './components/Footer';
 import Contact from './pages/Contact';
 import Dashboard from './pages/Dashboard';
 import Onboarding from './components/Onboarding';
-import ReferralCard from './pages/ReferralCard';
+import ReferralCard from './referralstack_components/ReferralCard';
 import CreateReferral from './pages/CreateReferral';
 import EditReferral from './pages/EditReferral';
 import Analytics from './pages/Analytics';
