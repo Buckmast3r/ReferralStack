@@ -14,7 +14,6 @@ import Pricing from './pages/Pricing';
 import PublicReferralCard from './pages/PublicReferralCard';
 import Navbar from './components/Navbar';
 import Profile from './pages/Profile';
-import Landing from './pages/Landing';
 import Footer from './components/Footer';
 import Contact from './pages/Contact';
 import Dashboard from './pages/Dashboard';
