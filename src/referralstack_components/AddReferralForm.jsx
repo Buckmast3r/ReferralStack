@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useReferrals } from '../hooks/useReferrals';
+import { useReferrals } from '../referralstack_hooks/useReferrals';
 
 export default function AddReferralForm() {
   const { addReferral } = useReferrals();
