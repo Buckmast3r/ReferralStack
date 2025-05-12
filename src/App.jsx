@@ -20,7 +20,6 @@ import Contact from './pages/Contact';
 import Dashboard from './pages/Dashboard';
 import Onboarding from './components/Onboarding';
 import ReferralCard from './referralstack_components/ReferralCard';
-import EditReferral from './pages/EditReferral';
 import Analytics from './pages/Analytics';
 import Monitoring from './pages/Monitoring';
 import AddReferralForm from './referralstack_components/AddReferralForm';
@@ -61,19 +60,17 @@ const App = () => {
             <main className="flex-grow">
               <Routes>
                 {/* Public Routes */}
-                <Route path="/" element={<Landing />} />
+                <Route path="/" element={<LandingPage />} />
                 <Route path="/home" element={<Home />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/privacy" element={<Privacy />} />
                 <Route path="/terms" element={<Terms />} />
                 <Route path="/pricing" element={<Pricing />} />
-                <Route path="/card/:cardId" element={<PublicReferralCard />} />
-                <Route path="/profile" element={<Profile />} />
                 <Route path="/contact" element={<Contact />} />
-                <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/onboarding" element={<Onboarding />} />
-                <Route path="/card/:id" element={<ReferralCard />} />
+                <Route path="/card/:cardId" element={<PublicReferralCard />} />
+
+                {/* Protected Routes */}
                 <Route
                   path="/dashboard"
                   element={
@@ -102,7 +99,7 @@ const App = () => {
                   path="/edit/:id"
                   element={
                     <PrivateRoute>
-                      <EditReferral />
+                      <AddReferralForm />
                     </PrivateRoute>
                   }
                 />
@@ -122,6 +119,15 @@ const App = () => {
                     </PrivateRoute>
                   }
                 />
+                <Route
+                  path="/onboarding"
+                  element={
+                    <PrivateRoute>
+                      <Onboarding />
+                    </PrivateRoute>
+                  }
+                />
+
                 {/* Catch all route */}
                 <Route path="*" element={<Navigate to="/" />} />
               </Routes>
