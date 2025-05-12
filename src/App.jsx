@@ -20,10 +20,10 @@ import Contact from './pages/Contact';
 import Dashboard from './pages/Dashboard';
 import Onboarding from './components/Onboarding';
 import ReferralCard from './referralstack_components/ReferralCard';
-import CreateReferral from './pages/CreateReferral';
 import EditReferral from './pages/EditReferral';
 import Analytics from './pages/Analytics';
 import Monitoring from './pages/Monitoring';
+import AddReferralForm from './referralstack_components/AddReferralForm';
 
 // Protected Feature component (for features that require auth)
 const ProtectedFeature = ({ children }) => {
@@ -94,7 +94,7 @@ const App = () => {
                   path="/create"
                   element={
                     <PrivateRoute>
-                      <CreateReferral />
+                      <AddReferralForm />
                     </PrivateRoute>
                   }
                 />
