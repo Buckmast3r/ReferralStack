@@ -81,12 +81,13 @@ export default function ReferralCard({ referral }) {
 
   return (
     <div
-      className={`overflow-hidden transition-transform duration-300 ease-in-out border ${colors.border} hover:shadow-2xl hover:scale-[1.015] backdrop-blur-md rounded-xl`}
+      className={`overflow-hidden transition-transform duration-300 ease-in-out border ${colors.border} hover:shadow-2xl hover:scale-[1.015] backdrop-blur-md rounded-xl mb-6`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      style={{ maxWidth: 600, width: '100%' }}
     >
-      <div className="flex flex-col md:flex-row">
-        <div className={`p-6 ${colors.bg} md:w-2/3 space-y-4`}>
+      <div className="flex flex-col md:flex-row w-full min-w-0">
+        <div className={`p-6 ${colors.bg} md:w-2/3 w-full min-w-0 space-y-4`}>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="relative h-12 w-12 overflow-hidden rounded-full bg-white dark:bg-slate-700 p-1 shadow-md">
@@ -112,7 +113,7 @@ export default function ReferralCard({ referral }) {
           )}
         </div>
 
-        <div className="md:w-1/3 flex flex-col backdrop-blur-sm bg-white/80 dark:bg-slate-800/80 border-l border-slate-200 dark:border-slate-700">
+        <div className="md:w-1/3 w-full flex flex-col backdrop-blur-sm bg-white/80 dark:bg-slate-800/80 border-t md:border-t-0 md:border-l border-slate-200 dark:border-slate-700 min-w-0">
           <div className="px-6 py-5 flex-grow space-y-3">
             <div className="text-xs text-slate-500 dark:text-slate-400 mb-1 break-all font-mono">
               {referral.links[0]?.url || ''}
