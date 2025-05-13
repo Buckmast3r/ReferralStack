@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import Button from '../components/Button';
 import { ToastContainer, toast } from 'react-toastify';
 import { supabase } from '../utils/supabaseClient';
@@ -146,6 +146,14 @@ const Login = () => {
                         </Button>
                     </div>
                 </form>
+                <div className="text-sm text-center">
+                    <p className="text-gray-600">
+                        Don't have an account?{' '}
+                        <Link to="/register" className="font-medium text-indigo-600 hover:text-indigo-500">
+                            Create new account
+                        </Link>
+                    </p>
+                </div>
             </div>
         </div>
     );
