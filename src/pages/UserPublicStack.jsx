@@ -12,18 +12,50 @@ export default function UserPublicStack() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const { data: profileData } = await supabase
-        .from("profiles")
-        .select("*, referrals(*), subscription") // This might need adjustment based on your actual table/column names
-        .eq("username", username)
-        .single();
+      // setLoading(true); // Optional: if you add a loading state
+      // setError(null); // Optional: if you add an error state
+      try {
+        const { data: profileData, error: profileError } = await supabase
+          .from("profiles")
+          .select(`
+            *,
+            referrals (*),
+            subscriptions (status, plan_name)
+          `)
+          .eq("username", username)
+          .single();
 
-      if (profileData) {
-        setProfile(profileData);
-        setReferrals(profileData.referrals || []);
-        // Assuming 'subscription' field directly indicates pro status or you have a 'plan' field
-        setIsPro(profileData.subscription === "pro" || profileData.plan === "pro"); 
-        setShowAnalytics(profileData.show_analytics_public || false);
+        if (profileError) {
+          console.error("Error fetching profile and subscriptions:", profileError);
+          // Handle error appropriately, e.g., set an error state, redirect, or show message
+          // setProfile(null); 
+          // setLoading(false);
+          return;
+        }
+
+        if (profileData) {
+          setProfile(profileData);
+          setReferrals(profileData.referrals || []);
+          
+          // Determine if user is "Pro"
+          // A user might have multiple subscription records (e.g., old, canceled ones)
+          // So, find if there's any current 'active' or 'trialing' subscription.
+          const activeSubscription = profileData.subscriptions?.find(
+            sub => sub.status === 'active' || sub.status === 'trialing'
+          );
+          setIsPro(!!activeSubscription); 
+          
+          setShowAnalytics(profileData.show_analytics_public || false);
+        } else {
+          // Handle case where profileData is null (e.g., username not found)
+          // setProfile(null);
+        }
+      } catch (err) {
+        console.error("Unexpected error in fetchData:", err);
+        // setError("Failed to load stack data.");
+        // setProfile(null);
+      } finally {
+        // setLoading(false);
       }
     };
     fetchData();

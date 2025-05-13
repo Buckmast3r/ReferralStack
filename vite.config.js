@@ -5,7 +5,7 @@ import { resolve } from 'path';
 export default defineConfig({
     plugins: [react()],
     root: '.', // Ensure the root is set to the project directory
-    base: './', // Set the base path for resolving assets
+    base: '/', // Set the base path for resolving assets
     resolve: {
         alias: {
             '@': resolve(__dirname, 'src'), // Alias '@' to the 'src' directory
