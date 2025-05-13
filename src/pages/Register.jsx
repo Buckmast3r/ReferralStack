@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext'; // Context handles auth and subsequent profile fetching
 // import { supabase } from '../utils/supabaseClient'; // No longer needed here for direct profile insert
 import Button from '../components/Button';
@@ -112,6 +112,14 @@ const Register = () => {
                         </Button>
                     </div>
                 </form>
+                <div className="text-sm text-center">
+                    <p className="text-gray-600">
+                        Already have an account?{' '}
+                        <Link to="/login" className="font-medium text-indigo-600 hover:text-indigo-500">
+                            Log in
+                        </Link>
+                    </p>
+                </div>
             </div>
         </div>
     );
