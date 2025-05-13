@@ -11,12 +11,18 @@ const Register = () => {
     const [email, setEmail] = useState('');
     // const [username, setUsername] = useState(''); // Removed username state
     const [password, setPassword] = useState('');
+    const [termsAccepted, setTermsAccepted] = useState(false); // New state for terms checkbox
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     const handleRegister = async (e) => {
         e.preventDefault();
-        // Removed username trim check
+
+        if (!termsAccepted) {
+            toast.error('Please accept the Terms and Conditions and Privacy Policy.');
+            return;
+        }
+
         setLoading(true);
         try {
             // Register with Supabase Auth (via AuthContext)
@@ -87,6 +93,28 @@ const Register = () => {
                                 onChange={(e) => setPassword(e.target.value)}
                                 disabled={loading}
                             />
+                        </div>
+                    </div>
+
+                    {/* Terms and Conditions Checkbox */}
+                    <div className="flex items-start">
+                        <div className="flex items-center h-5">
+                            <input
+                                id="terms-and-conditions"
+                                name="terms-and-conditions"
+                                type="checkbox"
+                                checked={termsAccepted}
+                                onChange={(e) => setTermsAccepted(e.target.checked)}
+                                className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
+                            />
+                        </div>
+                        <div className="ml-3 text-sm">
+                            <label htmlFor="terms-and-conditions" className="font-medium text-gray-700">
+                                I agree to the
+                                <Link to="/terms" target="_blank" rel="noopener noreferrer" className="text-indigo-600 hover:text-indigo-500"> Terms and Conditions </Link>
+                                and
+                                <Link to="/privacy" target="_blank" rel="noopener noreferrer" className="text-indigo-600 hover:text-indigo-500"> Privacy Policy</Link>.
+                            </label>
                         </div>
                     </div>
 
