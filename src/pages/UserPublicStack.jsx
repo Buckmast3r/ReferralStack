@@ -76,6 +76,7 @@ export default function UserPublicStack() {
           <div className="text-center sm:text-left">
             <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white">{profile.username}</h1>
             {profile.bio && <p className="text-slate-600 dark:text-slate-300 text-sm mt-2 line-clamp-3">{profile.bio}</p>}
+            <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">Here's an overview of your referral activity.</p>
           </div>
         </div>
         <div className="mt-6 flex flex-col sm:flex-row gap-3 justify-center sm:justify-start">
@@ -93,8 +94,16 @@ export default function UserPublicStack() {
       {isPro && showAnalytics && (
         <div className="max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-10">
           <StatCard icon={<Eye className="w-6 h-6" />} label="Total Clicks" value={referrals.reduce((sum, r) => sum + (r.clicks || 0), 0)} />
-          <StatCard icon={<Layers3 className="w-6 h-6" />} label="Total Cards" value={referrals.length} />
-          <StatCard icon={<Sparkles className="w-6 h-6" />} label="Top Performing Card" value={referrals[0]?.title || "-"} />
+          <StatCard icon={<Layers3 className="w-6 h-6" />} label="Total Referral Cards" value={referrals.length} />
+          <StatCard 
+            icon={<Sparkles className="w-6 h-6" />}
+            label="Avg. Clicks per Card" 
+            value={
+              referrals.length > 0 
+                ? (referrals.reduce((sum, r) => sum + (r.clicks || 0), 0) / referrals.length).toFixed(1) 
+                : 0
+            } 
+          />
         </div>
       )}
 
