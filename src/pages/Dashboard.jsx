@@ -142,9 +142,9 @@ const Dashboard = () => {
                       {new Date(referral.created_at).toLocaleDateString()}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-3">
-                      <Link to={`/card/${referral.id}`} className="text-green-600 hover:text-green-700 dark:text-green-500 dark:hover:text-green-400 transition-colors duration-150" target="_blank" rel="noopener noreferrer">
+                      {/* <Link to={`/card/${referral.id}`} className="text-green-600 hover:text-green-700 dark:text-green-500 dark:hover:text-green-400 transition-colors duration-150" target="_blank" rel="noopener noreferrer">
                         Preview
-                      </Link>
+                      </Link> */}
                       <Link to={`/edit/${referral.id}`} className="text-blue-600 hover:text-blue-700 dark:text-blue-500 dark:hover:text-blue-400 transition-colors duration-150">
                         Edit
                       </Link>

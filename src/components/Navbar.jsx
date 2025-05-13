@@ -8,6 +8,8 @@ export default function Navbar() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
 
+  console.log('Navbar - isAuthenticated:', isAuthenticated, 'User:', user);
+
   const handleSignOut = async () => {
     localStorage.clear();
     sessionStorage.clear();
@@ -37,7 +39,7 @@ export default function Navbar() {
         <Link to="/pricing" className="text-gray-300 hover:text-white transition-colors" aria-label="Pricing">Pricing</Link>
         {isAuthenticated && user ? (
           <>
-            <Link to="/dashboard" className="text-gray-300 hover:text-white transition-colors" aria-label="Dashboard">My Stack</Link>
+            <Link to="/dashboard" className="text-gray-300 hover:text-white transition-colors" aria-label="Dashboard">Dashboard</Link>
             <div className="relative" ref={dropdownRef}>
               <button 
                 onClick={toggleDropdown}
