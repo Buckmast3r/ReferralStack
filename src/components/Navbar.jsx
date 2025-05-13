@@ -40,6 +40,9 @@ export default function Navbar() {
         {isAuthenticated && user ? (
           <>
             <Link to="/dashboard" className="text-gray-300 hover:text-white transition-colors" aria-label="Dashboard">Dashboard</Link>
+            {user?.username && 
+              <Link to={`/u/${user.username}`} className="text-gray-300 hover:text-white transition-colors" aria-label="My Stack">My Stack</Link>
+            }
             <div className="relative" ref={dropdownRef}>
               <button 
                 onClick={toggleDropdown}

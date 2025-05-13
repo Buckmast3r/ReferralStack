@@ -22,6 +22,7 @@ import ReferralCard from './referralstack_components/ReferralCard';
 import Analytics from './pages/Analytics';
 import Monitoring from './pages/Monitoring';
 import AddReferralForm from './referralstack_components/AddReferralForm';
+import UserPublicStack from './pages/UserPublicStack';
 
 // Protected Feature component (for features that require auth)
 const ProtectedFeature = ({ children }) => {
@@ -66,6 +67,7 @@ const App = () => {
                 <Route path="/pricing" element={<Pricing />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/card/:cardId" element={<PublicReferralCard />} />
+                <Route path="/u/:username" element={<UserPublicStack />} />
 
                 {/* Protected Routes */}
                 <Route

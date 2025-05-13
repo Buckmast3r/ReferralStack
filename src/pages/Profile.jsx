@@ -100,9 +100,9 @@ export default function Profile() {
 
   if (loading) return <div className="text-center py-12">Loading...</div>;
 
-  const publicPageUrl = profile.custom_slug 
-    ? `https://refstack.me/${profile.custom_slug}` 
-    : `https://refstack.me/user/${profile.username}`;
+  const publicPageUrl = profile.custom_slug && profile.payment_status === 'paid'
+    ? `${window.location.origin}/u/${profile.custom_slug}` 
+    : (profile.username ? `${window.location.origin}/u/${profile.username}` : 'Please set a username');
   
   const isProUser = profile.payment_status === 'paid';
 
