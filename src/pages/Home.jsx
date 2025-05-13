@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import ReferralGrid from '../components/ReferralGrid';
 import { supabase } from '../utils/supabaseClient';
+import { Link } from 'react-router-dom';
 
 export default function Home() {
     const { user, isAuthenticated } = useAuth();
@@ -40,30 +41,51 @@ export default function Home() {
         return null;
     }
 
+    // Placeholder for user plan - replace with actual logic
+    const userPlan = 'Pro'; // or 'Free'
+
     return (
         <div className="max-w-7xl mx-auto p-6">
             {/* Welcome Section */}
-            <div className="mb-8">
-                <h1 className="text-3xl font-bold mb-2">Welcome back, {user?.email?.split('@')[0] || 'User'}!</h1>
-                <p className="text-gray-600">Manage your referral cards and track your performance.</p>
+            <div className="mb-8 p-6 bg-white rounded-lg shadow-sm border border-gray-200">
+                <div className="flex items-center mb-2">
+                    <span className="text-3xl mr-3">👋</span>
+                    <h1 className="text-3xl font-bold">Welcome back, {user?.email?.split('@')[0] || 'User'}!</h1>
+                    <span className={`ml-3 px-2 py-0.5 rounded-full text-sm font-semibold ${userPlan === 'Pro' ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'}`}>
+                        {userPlan}
+                    </span>
+                </div>
+                <p className="text-gray-600 mb-4">Manage your referral cards and track your performance.</p>
+                <Link to="/add-referral" className="text-blue-600 hover:text-blue-800 font-semibold">
+                    Let's add your next card →
+                </Link>
             </div>
 
             {/* Stats Grid */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-                    <h3 className="text-lg font-semibold text-gray-600 mb-2">Total Views</h3>
+                <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 hover:scale-105 transition-transform duration-200 ease-in-out">
+                    <div className="flex items-center justify-between mb-2">
+                        <h3 className="text-lg font-semibold text-gray-600">Total Views</h3>
+                        <span className="text-2xl">👁️</span>
+                    </div>
                     <p className="text-3xl font-bold">
                         {statsLoading ? '...' : stats.totalViews}
                     </p>
                 </div>
-                <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-                    <h3 className="text-lg font-semibold text-gray-600 mb-2">Total Clicks</h3>
+                <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 hover:scale-105 transition-transform duration-200 ease-in-out">
+                    <div className="flex items-center justify-between mb-2">
+                        <h3 className="text-lg font-semibold text-gray-600">Total Clicks</h3>
+                        <span className="text-2xl">🖱️</span>
+                    </div>
                     <p className="text-3xl font-bold">
                         {statsLoading ? '...' : stats.totalClicks}
                     </p>
                 </div>
-                <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-                    <h3 className="text-lg font-semibold text-gray-600 mb-2">Active Cards</h3>
+                <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 hover:scale-105 transition-transform duration-200 ease-in-out">
+                    <div className="flex items-center justify-between mb-2">
+                        <h3 className="text-lg font-semibold text-gray-600">Active Cards</h3>
+                        <span className="text-2xl">🃏</span>
+                    </div>
                     <p className="text-3xl font-bold">
                         {statsLoading ? '...' : stats.activeCards}
                     </p>
@@ -71,7 +93,19 @@ export default function Home() {
             </div>
             {statsError && <div className="text-red-600 mb-4">{statsError}</div>}
 
-            {/* Referral Cards Section */}
+            {/* Referral Card Preview Section - Placeholder */}
+            {/* 
+            <div className="mb-8">
+                <h2 className="text-2xl font-bold mb-4">Your Latest Card</h2>
+                <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    // Add your ReferralCard component here
+                    // e.g., <ReferralCard data={latestCardData} /> 
+                    <p>Referral Card Preview will be here.</p>
+                </div>
+            </div>
+            */}
+
+            {/* Referral Cards Grid Section */}
             <ReferralGrid />
         </div>
     );
