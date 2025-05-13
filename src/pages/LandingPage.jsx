@@ -4,6 +4,7 @@ import Button from "../components/Button";
 import { Link } from "react-router-dom";
 import { Layers, LayoutPanelLeft, BarChart3, CalendarClock, Paintbrush, TrendingUp } from 'lucide-react';
 import TestimonialsCarousel from "../components/TestimonialsCarousel";
+import { IconName } from 'lucide-react';
 
 export default function LandingPage() {
   const features = [
