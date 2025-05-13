@@ -17,7 +17,7 @@ import Profile from './pages/Profile';
 import Footer from './components/Footer';
 import Contact from './pages/Contact';
 import Dashboard from './pages/Dashboard';
-import Onboarding from './components/Onboarding';
+// import Onboarding from './components/Onboarding'; // Removed Onboarding import
 import ReferralCard from './referralstack_components/ReferralCard';
 import Analytics from './pages/Analytics';
 import Monitoring from './pages/Monitoring';
@@ -30,8 +30,7 @@ const ProtectedFeature = ({ children }) => {
 };
 
 const PrivateRoute = ({ children }) => {
-  const { user, loading } = useAuth();
-  const { profile } = useAuth();
+  const { user, loading, profile } = useAuth(); // Cleaned up profile destructuring
 
   if (loading) {
     return <div>Loading...</div>;
@@ -41,10 +40,10 @@ const PrivateRoute = ({ children }) => {
     return <Navigate to="/login" />;
   }
 
-  // Redirect to onboarding if profile is not set up
-  if (!profile?.username) {
-    return <Navigate to="/onboarding" />;
-  }
+  // Removed redirection to onboarding if profile is not set up
+  // if (!profile?.username) {
+  //   return <Navigate to="/onboarding" />;
+  // }
 
   return children;
 };
@@ -118,14 +117,15 @@ const App = () => {
                     </PrivateRoute>
                   }
                 />
-                <Route
+                {/* Removed Onboarding Route */}
+                {/* <Route
                   path="/onboarding"
                   element={
                     <PrivateRoute>
                       <Onboarding />
                     </PrivateRoute>
                   }
-                />
+                /> */}
 
                 {/* Catch all route */}
                 <Route path="*" element={<Navigate to="/" />} />
