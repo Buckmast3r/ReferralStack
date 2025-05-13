@@ -14,7 +14,7 @@ export default function Navbar() {
 
   return (
     <nav className="w-full bg-white border-b border-gray-200 shadow-sm px-4 py-3 flex items-center justify-between">
-      <Link to="/home" className="text-2xl font-bold text-blue-700 tracking-tight hover:text-blue-900 transition-colors">RefStack.me</Link>
+      <Link to="/dashboard" className="text-2xl font-bold text-blue-700 tracking-tight hover:text-blue-900 transition-colors">RefStack.me</Link>
       <div className="flex items-center space-x-4">
         <Link to="/pricing" className="text-gray-300 hover:text-white transition-colors" aria-label="Pricing">Pricing</Link>
         {isAuthenticated && user ? (
