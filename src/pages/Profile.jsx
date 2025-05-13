@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { Copy } from 'lucide-react';
 
 export default function Profile() {
-  const { user } = useAuth();
+  const { user, refreshUserProfile } = useAuth();
   const [profile, setProfile] = useState({
     username: '',
     full_name: '',
@@ -26,16 +26,30 @@ export default function Profile() {
     async function fetchProfile() {
       setLoading(true);
       setError(null);
+      if (!user?.id) {
+        setLoading(false);
+        return;
+      }
       try {
-        const { data, error } = await supabase
+        const { data, error: fetchError } = await supabase
           .from('profiles')
           .select('*')
           .eq('id', user.id)
           .single();
-        if (error) throw error;
-        setProfile(data || {});
+        
+        if (fetchError) {
+            if (fetchError.code === 'PGRST116') {
+                setProfile({ username: '', full_name: '', avatar_url: '', bio: '', twitter_url: '', custom_slug: '', payment_status: 'free' });
+            } else {
+                throw fetchError;
+            }
+        } else {
+            setProfile(data || { username: '', full_name: '', avatar_url: '', bio: '', twitter_url: '', custom_slug: '', payment_status: 'free' });
+        }
       } catch (err) {
-        setError('Failed to load profile.');
+        setError('Failed to load profile data. Please try again.');
+        console.error("Error in Profile.jsx fetchProfile:", err);
+        setProfile({ username: '', full_name: '', avatar_url: '', bio: '', twitter_url: '', custom_slug: '', payment_status: 'free' });
       } finally {
         setLoading(false);
       }
@@ -54,6 +68,7 @@ export default function Profile() {
     setSuccess(null);
     try {
       const updates = {
+        id: user.id,
         username: profile.username,
         full_name: profile.full_name,
         avatar_url: profile.avatar_url,
@@ -62,14 +77,22 @@ export default function Profile() {
       };
       if (profile.payment_status === 'paid') {
         updates.custom_slug = profile.custom_slug;
+      } else {
+        updates.custom_slug = null;
       }
 
-      const { error } = await supabase
+      const { error: upsertError } = await supabase
         .from('profiles')
-        .update(updates)
-        .eq('id', user.id);
-      if (error) throw error;
-      setSuccess('Profile updated!');
+        .upsert(updates, { onConflict: 'id' })
+        .select()
+        .single();
+
+      if (upsertError) throw upsertError;
+      
+      setSuccess('Profile updated successfully!');
+      if (refreshUserProfile) {
+        await refreshUserProfile();
+      }
     } catch (err) {
       setError('Failed to update profile.');
     } finally {

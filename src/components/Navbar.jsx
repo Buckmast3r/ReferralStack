@@ -3,12 +3,12 @@ import { useAuth } from '../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
 
 export default function Navbar() {
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, userProfile } = useAuth();
   const navigate = useNavigate();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
 
-  console.log('Navbar - isAuthenticated:', isAuthenticated, 'User:', user);
+  console.log('Navbar - isAuthenticated:', isAuthenticated, 'User:', user, 'Profile:', userProfile);
 
   const handleSignOut = async () => {
     localStorage.clear();
@@ -40,8 +40,8 @@ export default function Navbar() {
         {isAuthenticated && user ? (
           <>
             <Link to="/dashboard" className="text-gray-300 hover:text-white transition-colors" aria-label="Dashboard">Dashboard</Link>
-            {user?.username && 
-              <Link to={`/u/${user.username}`} className="text-gray-300 hover:text-white transition-colors" aria-label="My Stack">My Stack</Link>
+            {userProfile?.username && 
+              <Link to={`/u/${userProfile.username}`} className="text-gray-300 hover:text-white transition-colors" aria-label="My Stack">My Stack</Link>
             }
             <div className="relative" ref={dropdownRef}>
               <button 

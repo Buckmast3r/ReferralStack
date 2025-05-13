@@ -1,46 +1,46 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext'; // <-- Make sure this is correct
-import { supabase } from '../utils/supabaseClient'; // <-- Only needed if you want to insert into a custom table
+import { useAuth } from '../context/AuthContext'; // Context handles auth and subsequent profile fetching
+// import { supabase } from '../utils/supabaseClient'; // No longer needed here for direct profile insert
 import Button from '../components/Button';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const Register = () => {
-    const { register } = useAuth();
+    const { register } = useAuth(); // register from AuthContext
     const [email, setEmail] = useState('');
+    // const [username, setUsername] = useState(''); // Removed username state
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     const handleRegister = async (e) => {
         e.preventDefault();
+        // Removed username trim check
         setLoading(true);
         try {
-            // Register with Supabase Auth
-            const { success, error, user } = await register(email, password);
+            // Register with Supabase Auth (via AuthContext)
+            // AuthContext's register function will call supabase.auth.signUp()
+            // and then AuthContext's useEffect/onAuthStateChange will trigger fetchUserProfile.
+            const authResponse = await register(email, password);
 
-            if (!success) {
-                toast.error(error || 'Failed to register. Please try again.');
+            if (!authResponse.success) {
+                toast.error(authResponse.error || 'Failed to register. Please try again.');
                 setLoading(false);
                 return;
             }
 
-            // OPTIONAL: Insert into your custom user table (e.g., 'profiles')
-            // Uncomment and adjust the table/fields as needed
-            /*
-            const { error: dbError } = await supabase
-                .from('profiles')
-                .insert([{ id: user.id, email }]);
-            if (dbError) {
-                toast.error('User created, but failed to save profile info.');
-            }
-            */
+            // Profile insertion logic removed from here.
+            // AuthContext is responsible for fetching/creating profile after auth events.
 
-            toast.success('Successfully registered!');
-            navigate('/login');
+            toast.success('Successfully registered! Please check your email to confirm your account if required.');
+            // If email confirmation is required, user won't be truly logged in until confirmed.
+            // Navigating to login might be more appropriate than to a protected route immediately.
+            navigate('/login'); 
+
         } catch (err) {
-            toast.error('Failed to register. Please try again.');
+            toast.error('An unexpected error occurred during registration.');
+            console.error("Registration Page Error:", err);
         } finally {
             setLoading(false);
         }
@@ -48,7 +48,7 @@ const Register = () => {
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-            <ToastContainer />
+            <ToastContainer position="bottom-right" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
             <div className="max-w-md w-full space-y-8">
                 <div>
                     <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
@@ -72,6 +72,7 @@ const Register = () => {
                                 disabled={loading}
                             />
                         </div>
+                        {/* Username input field removed */}
                         <div>
                             <label htmlFor="password" className="sr-only">Password</label>
                             <input
@@ -93,16 +94,18 @@ const Register = () => {
                         <Button
                             type="submit"
                             disabled={loading}
-                            className="w-full flex justify-center items-center"
+                            className="w-full flex justify-center items-center group relative"
                         >
                             {loading ? (
-                                <div className="flex items-center">
-                                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                    </svg>
+                                <>
+                                    <span className="absolute left-0 inset-y-0 flex items-center pl-3">
+                                        <svg className="animate-spin h-5 w-5 text-indigo-300 group-hover:text-indigo-100" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                        </svg>
+                                    </span>
                                     Signing up...
-                                </div>
+                                </>
                             ) : (
                                 'Sign Up'
                             )}
