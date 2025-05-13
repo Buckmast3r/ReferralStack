@@ -9,7 +9,6 @@ const PublicReferralCard = () => {
   const [card, setCard] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [clicked, setClicked] = useState(null);
 
   useEffect(() => {
     const fetchCard = async () => {
@@ -30,46 +29,46 @@ const PublicReferralCard = () => {
     fetchCard();
   }, [cardId]);
 
-  const handleClick = async (url, idx) => {
-    setClicked(idx);
-    await trackClick(url);
-    window.open(url, '_blank', 'noopener,noreferrer');
-    setTimeout(() => setClicked(null), 1000);
-  };
+  if (loading) return (
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 flex items-center justify-center">
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-500"></div>
+    </div>
+  );
 
-  if (loading) return <div className="text-center py-8">Loading...</div>;
-  if (error) return <div className="text-center py-8 text-red-500">{error}</div>;
-  if (!card) return <div className="text-center py-8">Card not found.</div>;
+  if (error) return (
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 flex items-center justify-center">
+      <div className="text-red-500 text-center">
+        <p className="text-xl font-semibold mb-2">{error}</p>
+        <p className="text-sm text-gray-600">Please try again later.</p>
+      </div>
+    </div>
+  );
+
+  if (!card) return (
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 flex items-center justify-center">
+      <div className="text-center">
+        <p className="text-xl font-semibold mb-2">Card not found</p>
+        <p className="text-sm text-gray-600">The referral card you're looking for doesn't exist.</p>
+      </div>
+    </div>
+  );
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gradient-to-b from-blue-50 to-gray-100">
-      <div className="w-full max-w-xl bg-white rounded-2xl shadow-2xl p-8">
-        <div className="flex flex-col items-center mb-8">
-          {/* Placeholder avatar/icon */}
-          <div className="w-20 h-20 rounded-full bg-blue-100 flex items-center justify-center mb-4 shadow">
-            <span className="text-4xl text-blue-500">🔗</span>
-          </div>
-          <h1 className="text-3xl font-extrabold mb-2 text-center">{card.title}</h1>
-          <p className="text-gray-600 text-center mb-4">{card.description}</p>
-        </div>
-        <div className="space-y-4">
-          {card.links && card.links.length > 0 ? (
-            card.links.map((link, idx) => (
-              <button
-                key={idx}
-                onClick={() => handleClick(link.url, idx)}
-                className={`block w-full px-6 py-3 rounded-lg font-semibold transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 shadow-sm
-                  ${clicked === idx ? 'bg-blue-300 text-white' : 'bg-blue-600 text-white hover:bg-blue-700'}`}
-                rel="noopener noreferrer"
-                aria-label={`Open referral link: ${link.label}`}
-                disabled={clicked === idx}
-              >
-                {clicked === idx ? 'Opening...' : link.label}
-              </button>
-            ))
-          ) : (
-            <div className="text-gray-400 text-center">No referral links available.</div>
-          )}
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900">
+      <div className="container mx-auto px-4 py-16">
+        <header className="mb-16 text-center">
+          <h1 className="text-5xl font-extrabold tracking-tight text-slate-900 dark:text-slate-50 relative inline-block">
+            Referral Stack
+            <span className="absolute left-1/2 -bottom-1 -translate-x-1/2 w-3/4 h-1 bg-gradient-to-r from-emerald-400 to-teal-400 rounded-full animate-pulse"></span>
+          </h1>
+          <p className="mt-6 text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
+            Organize and share your favorite referral and affiliate links in one place. Help others discover great
+            products while earning rewards.
+          </p>
+        </header>
+
+        <div className="max-w-4xl mx-auto">
+          <ReferralCard referral={card} />
         </div>
       </div>
     </div>
